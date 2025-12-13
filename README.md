@@ -1,4 +1,4 @@
-# 🚀 OpenQode Public Alpha
+# 🚀 OpenQode Public (GEN5 TUI Included!)
 
 **The Next-Generation AI Coding Assistant for your Terminal.**
 *Powered by Qwen & OpenCode.*
