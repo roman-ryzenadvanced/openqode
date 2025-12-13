@@ -45,7 +45,8 @@
     "remark-parse": "^11.0.0",
     "string-width": "^8.1.0",
     "strip-ansi": "^7.1.2",
-    "wrap-ansi": "^9.0.2"
+    "wrap-ansi": "^9.0.2",
+    "@qwen-code/qwen-code": "latest"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

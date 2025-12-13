@@ -1,74 +1,46 @@
 #!/bin/bash
-# OpenQode v1.3 Installation Script for Linux/Mac
+# OpenQode One-Liner Installer for Linux/Mac
 
-echo ""
-echo "========================================================"
-echo "  OpenQode v1.3 Alpha - Installation"
-echo "  AI-Powered Coding Assistant with Qwen Integration"
-echo "========================================================"
-echo ""
+echo -e "\033[0;36mOpenQode Auto-Installer\033[0m"
+echo -e "\033[0;36m-----------------------\033[0m"
 
-cd "$(dirname "$0")"
+# Check Git
+if ! command -v git &> /dev/null; then
+    echo -e "\033[0;31mError: Git is not installed.\033[0m"
+    echo "Please install Git (e.g., sudo apt install git or brew install git)"
+    exit 1
+fi
 
-# Check Node.js
-echo "[1/3] Checking Node.js..."
+# Check Node
 if ! command -v node &> /dev/null; then
-    echo ""
-    echo "ERROR: Node.js is not installed!"
-    echo ""
-    echo "Install Node.js:"
-    echo "  Ubuntu/Debian: curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt-get install -y nodejs"
-    echo "  macOS: brew install node"
-    echo "  Or download from: https://nodejs.org/"
-    echo ""
+    echo -e "\033[0;31mError: Node.js is not installed.\033[0m"
+    echo "Please install Node.js: https://nodejs.org/"
     exit 1
 fi
 
-# Check Node.js version
-NODE_VERSION=$(node -v | cut -d. -f1 | tr -d 'v')
-if [ "$NODE_VERSION" -lt 20 ]; then
-    echo ""
-    echo -e "\033[0;33mWARNING: Node.js v20+ is recommended! You have v${NODE_VERSION}.\033[0m"
-    echo "Some features may not work correctly."
-    echo ""
-fi
-echo "       Found: $(node --version)"
+TARGET_DIR="OpenQode"
+REPO_URL="https://github.com/roman-ryzenadvanced/OpenQode-Public-Alpha.git"
 
-# Install npm dependencies
-echo ""
-echo "[2/3] Installing dependencies..."
-echo "       (This may take a minute...)"
-npm install --legacy-peer-deps
-if [ $? -ne 0 ]; then
-    echo "ERROR: npm install failed!"
-    echo "Try: npm install --legacy-peer-deps"
-    exit 1
-fi
-echo "       Done!"
-
-# Check Qwen CLI (optional)
-echo ""
-echo "[3/3] Checking Qwen CLI (optional)..."
-if ! command -v qwen &> /dev/null; then
-    echo "       Qwen CLI not found (optional - Modern TUI doesn't need it)"
-    echo "       To install: npm install -g @anthropic/qwen-code"
+if [ -d "$TARGET_DIR" ]; then
+    echo -e "\033[1;33mDirectory '$TARGET_DIR' already exists. Entering...\033[0m"
 else
-    echo "       Qwen CLI already installed!"
+    echo -e "\033[1;33mCloning repository...\033[0m"
+    git clone "$REPO_URL" "$TARGET_DIR"
+    if [ $? -ne 0 ]; then
+        echo -e "\033[0;31mClone failed.\033[0m"
+        exit 1
+    fi
 fi
 
-# Ensure scripts are executable
-chmod +x OpenQode.sh start.sh 2>/dev/null
+cd "$TARGET_DIR"
 
-echo ""
-echo "========================================================"
-echo -e "\033[1;32m  Installation Complete! \033[0m"
-echo "========================================================"
-echo ""
-echo "  To start OpenQode:"
-echo ""
-echo -e "    \033[1;36m./OpenQode.sh\033[0m"
-echo ""
-echo "  Then select Option 5 for the Modern TUI!"
-echo ""
-echo "========================================================"
-echo ""
+if [ ! -d "node_modules" ]; then
+    echo -e "\033[1;33mInstalling dependencies...\033[0m"
+    npm install
+else
+    echo -e "\033[0;32mDependencies already installed.\033[0m"
+fi
+
+echo -e "\033[0;32mInstallation complete! Launching...\033[0m"
+chmod +x OpenQode.sh
+./OpenQode.sh

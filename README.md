@@ -10,35 +10,40 @@
 ## 👋 Welcome to OpenQode
 OpenQode is a powerful Terminal User Interface (TUI) that brings advanced AI coding capabilities directly to your command line. Whether you're debugging via SSH, coding on a cloud server, or just love the terminal, OpenQode is designed for you.
 
-We are proud to present two distinct experiences: **Next-Gen (Gen 5)** and **Classic (Gen 4)**.
-
 ---
 
-## ⚡ 1-Click Installation (Windows)
-Copy and paste this into PowerShell to automatically download, install, and run OpenQode:
+## ⚡ 1-Click Installation (Zero-Config)
 
+### 🖥️ Windows (PowerShell)
+Copy and paste this into PowerShell:
 ```powershell
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/roman-ryzenadvanced/OpenQode-Public-Alpha/main/install.ps1'))
 ```
+
+### 🍎 macOS / 🐧 Linux (Bash)
+Copy and paste this into your terminal:
+```bash
+curl -sL https://raw.githubusercontent.com/roman-ryzenadvanced/OpenQode-Public-Alpha/main/install.sh | bash
+```
+
+*(These scripts automatically download source, install dependencies, and launch the assistant)*
 
 ---
 
 ## 📦 Manual Installation
 
-### 🖥️ Windows Users
-1. **Download** the latest release or clone the repo.
+### Windows
+1. **Download** the latest release.
 2. Double-click **`OpenQode.bat`**.
    *(First run will automatically install dependencies)*
-3. Choose **Option 5** for the Next-Gen Experience!
 
-### 🍎 macOS / 🐧 Linux Users
+### Linux / Mac
 1. Open terminal in the folder.
 2. Run:
    ```bash
    chmod +x OpenQode.sh
    ./OpenQode.sh
    ```
-3. Choose **Option 5**.
 
 ---
 
@@ -53,24 +58,21 @@ We recommend starting with **Next-Gen (Option 5)**!
 | **Interactivity**| **Interactive Menus** (Arrow Keys Selection) | Command-based only |
 | **Models** | **Visual Model Selector** (`/model`) | Manual Switch via CLI |
 | **Thinking** | **Real-time Stats** (CPS, Tokens) | Basic Loading |
-| **Output** | **Collapsible Cards** & Markdown | Linear Log |
 
 ![Context and Stats](assets/screenshots/next-gen-2.png)
 
 ---
 
-## ⚡ Quick Start Guide
-Once in Next-Gen TUI:
+## ⚡ Feature: Zero-Config Authentication
+OpenQode attempts to use your existing Qwen CLI authentication. 
+- Using standard **Option 5**, simply follow the prompts.
+- If it's your first time, you may need to authenticate via browser.
+- The assistant is designed to be "Hassle Free"!
 
-- **Chat:** Just type your question!
-- **Select Model:** Type `/model` to open the visual selector.
-- **Switch Agent:** Type `/agent <name>` (e.g., `/agent planner`).
-
-### 🔑 Configuration (Optional)
-If you have your own API keys (e.g., for Qwen Coder models):
+### 🔑 Advanced Configuration
+If you have your own API keys or specialized setup:
 1. Copy `config.example.cjs` to `config.cjs`.
-2. Edit `config.cjs` and paste your key.
-3. Restart.
+2. Edit `config.cjs` to add your keys.
 
 ---
 
