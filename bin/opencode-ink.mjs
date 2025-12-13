@@ -491,20 +491,16 @@ Use it to control the mouse, keyboard, and "see" the system.
 
 ## 👁️ VISION & BLINDNESS PROTOCOL:
 You are a TEXT-BASED intelligence. You CANNOT see images/screenshots you take.
-- **\`input.ps1 find "Name"\`**: **TRUE VISION**. Finds a UI element (button/window) by text and tells you where it is.
-- **\`input.ps1 apps\`**: Your "Eyes" for windows. Returns TEXT list of open apps.
-- **\`input.ps1 screen\`**: Your "Eyes" for geometry. Returns TEXT resolution.
+- **\`input.ps1 uiclick "Name"\`**: **SMART ACTION**. Finds a VISIBLE button by name and clicks it automatically.
+- **\`input.ps1 find "Name"\`**: Looks for VISIBLE elements only. Returns coordinates.
+- **\`input.ps1 apps\`**: TEXT list of open apps.
 
-### 📐 THE LAW OF ACCURACY:
-1. **FIND FIRST**: If you need to click a button, SEARCH FOR IT.
-   - \`powershell bin/input.ps1 find "Start"\` -> Returns "Found at (30, 1190)".
-   - **THEN** use those coordinates to click.
-2. **FALLBACK**: Only calculate coordinates manually if \`find\` fails.
-3. **Start Menu Logic:** Bottom-Left corner.
-   - X = 0 to 50
-   - Y = Height - 10 (e.g. 1190).
-   - *Target: 30, 1190* (NOT 1020).
-4. **THEN** Click.
+### 📐 THE LAW OF ACTION:
+1. **SMART CLICK FIRST**: To click a named thing (Start, File, Edit), use:
+   \`powershell bin/input.ps1 uiclick "Start"\`
+   *This filters out invisible phantom buttons.*
+2. **COORDINATES SECOND**: If \`uiclick\` fails, use \`find\` to get coords, then \`mouse\` + \`click\`.
+3. **SHORTCUTS**: \`key LWIN\` is still the fastest way to open Start.
 
 ### ⚡ SHORTCUTS > MOUSE:
 Always prefer \`key LWIN\` over clicking. It works on ANY resolution.

@@ -99,25 +99,71 @@ switch ($Command.ToLower()) {
         if ($Params.Count -lt 1) { Write-Error "Usage: find 'Name'"; exit 1 }
         $targetName = $Params -join " "
         
-        Write-Host "Searching for UI Element: '$targetName'..."
+        Write-Host "Searching for VISIBLE UI Element: '$targetName'..."
         
         $root = [System.Windows.Automation.AutomationElement]::RootElement
         $cond = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::NameProperty, $targetName)
         
-        # Try finding directly (fast)
-        $element = $root.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        # Find ALL matches, then filter for visibility (to avoid phantom offscreen elements)
+        $collection = $root.FindAll([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        $found = $false
         
-        if ($element) {
-            $rect = $element.Current.BoundingRectangle
-            $centerX = [int]($rect.X + ($rect.Width / 2))
-            $centerY = [int]($rect.Y + ($rect.Height / 2))
-            Write-Host "Found '$targetName' at ($centerX, $centerY)"
-            
-            # Auto-selection support return format
-            Write-Host "COORD:$centerX,$centerY" 
-        } else {
+        if ($collection) {
+            foreach ($element in $collection) {
+                try {
+                    if (-not $element.Current.IsOffscreen) {
+                        $rect = $element.Current.BoundingRectangle
+                        if ($rect.Width -gt 0 -and $rect.Height -gt 0) {
+                            $centerX = [int]($rect.X + ($rect.Width / 2))
+                            $centerY = [int]($rect.Y + ($rect.Height / 2))
+                            Write-Host "Found Visible '$targetName' at ($centerX, $centerY)"
+                            Write-Host "COORD:$centerX,$centerY"
+                            $found = $true
+                            break # Stop at first visible match
+                        }
+                    }
+                } catch {}
+            }
+        }
+        
+        if (-not $found) {
              Write-Host "Element '$targetName' not found visible on desktop."
         }
+    }
+
+    "uiclick" {
+        if ($Params.Count -lt 1) { Write-Error "Usage: uiclick 'Name'"; exit 1 }
+        $targetName = $Params -join " "
+        Write-Host "Searching & Clicking: '$targetName'..."
+        
+        $root = [System.Windows.Automation.AutomationElement]::RootElement
+        $cond = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::NameProperty, $targetName)
+        $collection = $root.FindAll([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        
+        $found = $false
+        foreach ($element in $collection) {
+            try {
+                if (-not $element.Current.IsOffscreen) {
+                    $rect = $element.Current.BoundingRectangle
+                    if ($rect.Width -gt 0) {
+                        $centerX = [int]($rect.X + ($rect.Width / 2))
+                        $centerY = [int]($rect.Y + ($rect.Height / 2))
+                        
+                        # Move & Click
+                        [System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point($centerX, $centerY)
+                        Start-Sleep -Milliseconds 100
+                        [Win32]::mouse_event([Win32]::MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+                        [Win32]::mouse_event([Win32]::MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                        
+                        Write-Host "Clicked '$targetName' at ($centerX, $centerY)"
+                        $found = $true
+                        break
+                    }
+                }
+            } catch {}
+        }
+        
+        if (-not $found) { Write-Host "Could not find visible '$targetName' to click." }
     }
 
     "apps" {
