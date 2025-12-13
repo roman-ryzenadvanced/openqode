@@ -41,12 +41,14 @@ fi
 
 cd "$TARGET_DIR"
 
-if [ ! -d "node_modules" ]; then
-    echo -e "\033[1;33mInstalling dependencies...\033[0m"
-    npm install --legacy-peer-deps
-else
-    echo -e "\033[0;32mDependencies already installed.\033[0m"
+echo -e "\033[1;33mInstalling dependencies...\033[0m"
+npm install --legacy-peer-deps
+if [ $? -ne 0 ]; then
+    echo -e "\033[0;31mDependency installation failed. Please check logs.\033[0m"
+    # Don't exit, maybe it works anyway? No, strict.
+    exit 1
 fi
+echo -e "\033[0;32mDependencies installed.\033[0m"
 
 echo -e "\033[0;32mInstallation complete! Launching...\033[0m"
 chmod +x OpenQode.sh

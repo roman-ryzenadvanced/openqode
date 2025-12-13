@@ -30,12 +30,8 @@ if (Test-Path $targetDir) {
 
 Set-Location $targetDir
 
-if (!(Test-Path "node_modules")) {
-    Write-Host "Installing dependencies..." -ForegroundColor Yellow
-    npm install --legacy-peer-deps
-} else {
-    Write-Host "Dependencies already installed." -ForegroundColor Green
-}
+Write-Host "Installing dependencies..." -ForegroundColor Yellow
+npm install --legacy-peer-deps
 
 Write-Host "Installation complete! Launching..." -ForegroundColor Green
 .\OpenQode.bat
