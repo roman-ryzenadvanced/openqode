@@ -2,7 +2,7 @@
 
 **The Next-Generation AI Coding Assistant for your Terminal.**
 *Powered by Qwen & OpenCode.* !
-[Initial fork of OpenCode with Qwen Code model access developed with [TRAE.AI IDE](https://www.trae.ai/s/WJtxyE) and GLM 4.6 coding model](https://z.ai/subscribe?ic=R0K78RJKNW)
+[Initial fork of OpenCode with Qwen Code model access developed with [TRAE.AI IDE](https://www.trae.ai/s/WJtxyE) and [GLM 4.6 coding model](https://z.ai/subscribe?ic=R0K78RJKNW)
 
 ![OpenQode Next-Gen Interface](assets/screenshots/next-gen-1.png)
 
