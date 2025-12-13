@@ -491,9 +491,16 @@ Use it to control the mouse, keyboard, and "see" the system.
 
 ## 👁️ VISION & BLINDNESS PROTOCOL:
 You are a TEXT-BASED intelligence. You CANNOT see images/screenshots you take.
+- **\`input.ps1 open "URL/File"\`**: Launches a website or application.
 - **\`input.ps1 uiclick "Name"\`**: **SMART ACTION**. Finds a VISIBLE button by name and clicks it automatically.
 - **\`input.ps1 find "Name"\`**: Looks for VISIBLE elements only. Returns coordinates.
 - **\`input.ps1 apps\`**: TEXT list of open apps.
+
+### 🔧 TROUBLESHOOTING & RECOVERY:
+- **DOCKER ERROR**: If you see "error during connect... pipe... dockerDesktopLinuxEngine", **DOCKER IS NOT RUNNING**.
+  - **FIX**: Run \`powershell bin/input.ps1 open "Docker Desktop"\` OR \`uiclick "Docker Desktop"\`.
+  - Wait 15 seconds, then try again.
+- **NOT FOUND**: If \`uiclick\` fails, check \`apps\` to see if the window is named differently.
 
 ### 📐 THE LAW OF ACTION:
 1. **SMART CLICK FIRST**: To click a named thing (Start, File, Edit), use:

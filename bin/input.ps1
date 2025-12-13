@@ -166,6 +166,17 @@ switch ($Command.ToLower()) {
         if (-not $found) { Write-Host "Could not find visible '$targetName' to click." }
     }
 
+    "open" {
+        if ($Params.Count -lt 1) { Write-Error "Usage: open 'Path or URL'"; exit 1 }
+        $target = $Params -join " "
+        try {
+            Start-Process $target
+            Write-Host "Opened '$target'"
+        } catch {
+            Write-Error "Failed to open '$target': $_"
+        }
+    }
+
     "apps" {
         $apps = Get-Process | Where-Object { $_.MainWindowTitle -ne "" } | Select-Object Id, MainWindowTitle
         if ($apps) {
