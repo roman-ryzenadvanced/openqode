@@ -1,0 +1,40 @@
+OpenQode v1.01 Preview Edition Package Summary
+=============================================
+
+Package Contents:
+- OpenQode.ps1          - Main TUI launcher (starts immediately)
+- OpenQode-Menu.ps1     - Model selection menu launcher
+- OpenQode.bat          - Windows double-click TUI launcher
+- Install.ps1           - Installation script for system-wide access
+- PACKAGE_INFO.txt      - This package summary
+- bin/opencode.exe      - OpenCode binary with Qwen integration
+- scripts/              - Launcher scripts
+- docs/                 - Documentation and version info
+
+Features:
+✅ Interactive model selection menu
+✅ Automatic Qwen authentication
+✅ Multiple AI models (Qwen + OpenCode)
+✅ Lakeview mode (concise output)
+✅ Sequential thinking (structured problem-solving)
+✅ TUI interface
+✅ Self-contained package
+✅ Windows batch launcher
+✅ PowerShell installation script
+
+Models Available:
+1. Qwen Coder Model (Free - 2,000/day, 60 RPM)
+2. Qwen Vision Model (Free - 2,000/day, 60 RPM)
+3. OpenCode Big Pickle (Default)
+4. OpenCode GPT-5 Nano (Experimental)
+5. Grok Code
+
+Usage:
+1. Extract package to desired location
+2. Run .\Install.ps1 for system-wide access (optional)
+3. Run .\OpenQode.ps1 or double-click OpenQode.bat (starts TUI immediately)
+4. For model selection, run .\OpenQode-Menu.ps1
+5. Complete authentication if using Qwen models
+
+Package Size: ~50MB
+Requirements: Windows 10/11, PowerShell 5.1+, Internet
