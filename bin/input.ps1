@@ -9,6 +9,39 @@ param(
 # Load required assemblies
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -AssemblyName UIAutomationClient
+Add-Type -AssemblyName UIAutomationTypes
+
+# ... (Previous code remains) ...
+
+switch ($Command.ToLower()) {
+    # ... (Previous cases remain) ...
+
+    "find" {
+        if ($Params.Count -lt 1) { Write-Error "Usage: find 'Name'"; exit 1 }
+        $targetName = $Params -join " "
+        
+        Write-Host "Searching for UI Element: '$targetName'..."
+        
+        $root = [System.Windows.Automation.AutomationElement]::RootElement
+        $cond = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::NameProperty, $targetName)
+        
+        # Try finding directly (fast)
+        $element = $root.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        
+        if ($element) {
+            $rect = $element.Current.BoundingRectangle
+            $centerX = [int]($rect.X + ($rect.Width / 2))
+            $centerY = [int]($rect.Y + ($rect.Height / 2))
+            Write-Host "Found '$targetName' at ($centerX, $centerY)"
+            Write-Host "Action: mouse $centerX $centerY"
+        } else {
+             Write-Host "Element '$targetName' not found visible on desktop."
+        }
+    }
+
+    "apps" {
+    # ... (Rest remains) ...
 
 # C# P/Invoke for advanced Input (SendInput is more reliable than SendKeys)
 $code = @"
@@ -95,6 +128,31 @@ switch ($Command.ToLower()) {
         $g.Dispose()
         $bmp.Dispose()
         Write-Host "Screenshot saved to $fullPath"
+    }
+
+    "find" {
+        if ($Params.Count -lt 1) { Write-Error "Usage: find 'Name'"; exit 1 }
+        $targetName = $Params -join " "
+        
+        Write-Host "Searching for UI Element: '$targetName'..."
+        
+        $root = [System.Windows.Automation.AutomationElement]::RootElement
+        $cond = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::NameProperty, $targetName)
+        
+        # Try finding directly (fast)
+        $element = $root.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $cond)
+        
+        if ($element) {
+            $rect = $element.Current.BoundingRectangle
+            $centerX = [int]($rect.X + ($rect.Width / 2))
+            $centerY = [int]($rect.Y + ($rect.Height / 2))
+            Write-Host "Found '$targetName' at ($centerX, $centerY)"
+            
+            # Auto-selection support return format
+            Write-Host "COORD:$centerX,$centerY" 
+        } else {
+             Write-Host "Element '$targetName' not found visible on desktop."
+        }
     }
 
     "apps" {
