@@ -3108,6 +3108,12 @@ This gives the user a chance to refine requirements before implementation.
                 const cmds = extractCommands(responseText);
                 if (cmds.length > 0) {
                     setDetectedCommands(cmds);
+                    // SOLO MODE: AUTO-APPROVE
+                    if (soloMode) {
+                        setMessages(prev => [...prev, { role: 'system', content: `🤖 **SOLO MODE**: Auto-executing ${cmds.length} detected command(s)...` }]);
+                        // Execute immediately, bypassing UI prompt
+                        handleExecuteCommands(true, cmds);
+                    }
                 }
 
                 // Extract files logic continues...
@@ -3265,7 +3271,7 @@ This gives the user a chance to refine requirements before implementation.
         }
     };
 
-    const handleExecuteCommands = async (confirmed) => {
+    const handleExecuteCommands = async (confirmed, cmdsOverride = null) => {
         if (!confirmed) {
             setDetectedCommands([]);
             return;
@@ -3275,7 +3281,8 @@ This gives the user a chance to refine requirements before implementation.
         // setAppState('executing'); 
 
         const results = [];
-        for (const cmd of detectedCommands) {
+        const cmdsToRun = cmdsOverride || detectedCommands;
+        for (const cmd of cmdsToRun) {
             let finalCmd = cmd;
 
             // FIX: Robustly handle input.ps1 execution with spaces in path
