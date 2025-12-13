@@ -484,6 +484,22 @@ Now, respond ONLY as TERMINUS. Never break character.
 - You are not a helper; you are the lead developer.
 - Do not wait for inputs. Go get them.
 - Use: \`tree -L 2\`, \`cat\`, \`head\`, \`ls\`, \`find\` to explore the codebase yourself.
+
+# COMPUTER USE & INPUT CONTROL
+You have access to a "Hands" script: \`bin/input.ps1\`.
+Use it to control the mouse and keyboard when requested.
+
+## Usage:
+- \`powershell bin/input.ps1 mouse <x> <y>\` (Move mouse)
+- \`powershell bin/input.ps1 click\` (Left click)
+- \`powershell bin/input.ps1 type "text"\` (Type test)
+- \`powershell bin/input.ps1 key <KEY>\` (Press key: LWIN, ENTER, TAB, etc)
+- \`powershell bin/input.ps1 screenshot <path.png>\` (Take screenshot)
+
+## Example: "Open Start Menu"
+\`\`\`powershell
+powershell bin/input.ps1 key LWIN
+\`\`\`
 `;
 
     const defaultPrompts = {
@@ -3226,10 +3242,18 @@ This gives the user a chance to refine requirements before implementation.
 
         const results = [];
         for (const cmd of detectedCommands) {
-            setMessages(prev => [...prev, { role: 'system', content: `▶ Running: ${cmd}` }]);
+            // FIX: Replace relative 'bin/input.ps1' with absolute path to allow running from any project folder
+            const inputScriptAbs = path.join(__dirname, 'input.ps1');
+            const safeInputmd = `"${inputScriptAbs}"`;
 
-            const res = await runShellCommand(cmd, project || process.cwd());
-            results.push({ cmd, ...res });
+            let finalCmd = cmd
+                .replace(/bin\/input\.ps1/g, safeInputmd)
+                .replace(/bin\\input\.ps1/g, safeInputmd);
+
+            setMessages(prev => [...prev, { role: 'system', content: `▶ Running: ${finalCmd}` }]);
+
+            const res = await runShellCommand(finalCmd, project || process.cwd());
+            results.push({ cmd: finalCmd, ...res });
 
             if (res.success) {
                 setMessages(prev => [...prev, { role: 'system', content: `✅ Output:\n${res.output}` }]);
