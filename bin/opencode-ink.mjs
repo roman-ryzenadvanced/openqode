@@ -2075,6 +2075,8 @@ const App = () => {
 
     const [showTimeoutRow, setShowTimeoutRow] = useState(false);
     const [lastCheckpointText, setLastCheckpointText] = useState('');
+    // SOLO MODE STATE
+    const [soloMode, setSoloMode] = useState(false);
 
     // RESPONSIVE: Compute layout mode based on terminal size
     const layoutMode = computeLayoutMode(columns, rows);
@@ -2285,6 +2287,15 @@ const App = () => {
             const arg = parts.slice(1).join(' ');
 
             switch (cmd) {
+                case '/solo':
+                    setSoloMode(prev => !prev);
+                    setMessages(prev => [...prev, {
+                        role: 'system',
+                        content: `🤖 **SOLO MODE: ${!soloMode ? 'ON (Auto-Heal Enabled)' : 'OFF'}**\nErrors will now be automatically reported to the agent for fixing.`
+                    }]);
+                    setInput('');
+                    return;
+
                 case '/exit':
                 case '/quit':
                     exit();
