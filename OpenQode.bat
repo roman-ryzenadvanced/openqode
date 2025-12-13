@@ -12,7 +12,7 @@ REM --- Auto-Install Check ---
 if not exist "node_modules" (
     echo [INFO] First run detected! Installing dependencies...
     echo [INFO] This might take a minute...
-    call npm install
+    call npm install --legacy-peer-deps
     if %errorlevel% neq 0 (
         echo [ERROR] Failed to install dependencies. Please install Node.js.
         pause

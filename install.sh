@@ -43,7 +43,7 @@ cd "$TARGET_DIR"
 
 if [ ! -d "node_modules" ]; then
     echo -e "\033[1;33mInstalling dependencies...\033[0m"
-    npm install
+    npm install --legacy-peer-deps
 else
     echo -e "\033[0;32mDependencies already installed.\033[0m"
 fi

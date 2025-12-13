@@ -11,7 +11,7 @@ echo "========================================"
 
 if [ ! -d "node_modules" ]; then
     echo "[INFO] First run detected! Installing dependencies..."
-    npm install
+    npm install --legacy-peer-deps
     if [ $? -ne 0 ]; then
         echo "[ERROR] Failed to install dependencies. Please install Node.js."
         exit 1
