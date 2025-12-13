@@ -3288,11 +3288,28 @@ This gives the user a chance to refine requirements before implementation.
                 setMessages(prev => [...prev, { role: 'system', content: `✅ Output:\n${res.output}` }]);
             } else {
                 setMessages(prev => [...prev, { role: 'error', content: `❌ Failed (Exit ${res.code}):\n${res.output}` }]);
+                results.push({ failed: true, output: res.output, code: res.code, cmd: finalCmd });
             }
         }
 
         setDetectedCommands([]);
         setIsExecutingCommands(false);
+
+        // SOLO MODE: AUTO-HEAL
+        // If any command failed, immediately report back to the agent
+        const failures = results.filter(r => r.failed);
+        if (soloMode && failures.length > 0) {
+            const errorReport = failures.map(f =>
+                `COMMAND FAILED: \`${f.cmd}\`\nEXIT CODE: ${f.code}\nOUTPUT:\n${f.output}`
+            ).join('\n\n');
+
+            const autoPrompt = `🚨 **AUTO-HEAL REPORT** 🚨\nThe following commands failed during execution:\n\n${errorReport}\n\nPlease analyze these errors and provide the CORRECT commands to fix the issue. Do NOT ask for permission, just provide the fix.`;
+
+            setMessages(prev => [...prev, { role: 'system', content: `🔄 **SOLO AUTO-HEAL**: Reporting failures to Agent...` }]);
+
+            // Recursive call to AI
+            setTimeout(() => handleSubmit(autoPrompt), 100);
+        }
     };
 
     // Handle project selection
